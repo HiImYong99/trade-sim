@@ -5,7 +5,7 @@ export default defineConfig({
   brand: {
     displayName: '그때 샀더라면',
     primaryColor: '#3182F6',
-    icon: '/appicon.png',
+    icon: 'https://static.toss.im/appsintoss/25373/891d349e-6d6b-48ad-bb82-73a4b61e1a4e.png',
   },
   web: {
     host: '172.30.1.26',
@@ -16,4 +16,7 @@ export default defineConfig({
     },
   },
   permissions: [],
+  webViewProps: {
+    type: 'partner',
+  },
 });

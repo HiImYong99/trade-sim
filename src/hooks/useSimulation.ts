@@ -47,9 +47,9 @@ function monthsBetween(from: string, to: string): number {
   return (ty - fy) * 12 + (tm - fm);
 }
 
-// 데이터셋 최신 기준: 2025-06 (지식 컷오프: 2025년 8월)
-export const DATA_END = '2025-06';
-export const DATA_END_LABEL = '2025년 6월';
+// 데이터셋 최신 기준: 2026-03 (2026년 3월 22일 기준)
+export const DATA_END = '2026-03';
+export const DATA_END_LABEL = '2026년 3월';
 const CURRENT_MONTH = DATA_END;
 
 export function calculateSimulation(input: SimulationInput): SimulationResult | null {

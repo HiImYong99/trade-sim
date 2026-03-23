@@ -103,8 +103,8 @@ export function App() {
         )}
       </div>
 
-      {/* 배너 광고: AdScreen 제외한 모든 화면 하단에 표시 */}
-      {screen !== 'ad' && <BannerAd ready={tossAdsReady} />}
+      {/* 배너 광고: 주요 콘텐츠 화면(자산 선택·결과)에만 표시 — 광고 로드 등 일시적 화면에는 미표시 */}
+      {(screen === 'asset' || screen === 'result') && <BannerAd ready={tossAdsReady} />}
     </div>
   );
 }

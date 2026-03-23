@@ -219,7 +219,9 @@ function DetailRow({
 }
 
 function formatAssetPrice(price: number, currency: 'USD' | 'KRW'): string {
-  if (currency === 'USD') return `$${price.toLocaleString()}`;
+  if (currency === 'USD') {
+    return price < 1 ? `$${price.toFixed(2)}` : `$${price.toLocaleString()}`;
+  }
   return `${price.toLocaleString()}원`;
 }
 
