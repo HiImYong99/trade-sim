@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AssetScreen } from './screens/AssetScreen';
 import { FormScreen } from './screens/FormScreen';
 import { AdScreen } from './screens/AdScreen';
@@ -6,7 +6,7 @@ import { ResultScreen } from './screens/ResultScreen';
 import { BannerAd } from './components/BannerAd';
 import { type Asset } from './data/assets';
 import { calculateSimulation, type InvestmentType, type SimulationResult } from './hooks/useSimulation';
-import { TossAds } from '@apps-in-toss/web-framework';
+import { TossAds, graniteEvent } from '@apps-in-toss/web-framework';
 
 type Screen = 'asset' | 'form' | 'ad' | 'result';
 
@@ -17,6 +17,33 @@ export function App() {
   const [startYM, setStartYM] = useState('');
   const [result, setResult] = useState<SimulationResult | null>(null);
   const [tossAdsReady, setTossAdsReady] = useState(false);
+  const screenRef = useRef<Screen>('asset');
+
+  const navigateTo = useCallback((next: Screen) => {
+    screenRef.current = next;
+    setScreen(next);
+  }, []);
+
+  // graniteEvent backEvent — asset 화면이 아닐 때만 등록하여 이전 화면으로 이동
+  // asset 화면에서는 리스너를 해제하여 네이티브 기본 동작(앱 종료)이 실행돼요.
+  useEffect(() => {
+    if (screen === 'asset') return; // 최초 화면: 리스너 없음 → 네이티브 백 = 앱 종료
+
+    const unsubscribe = graniteEvent.addEventListener('backEvent', {
+      onEvent: () => {
+        const current = screenRef.current;
+        if (current === 'result') {
+          navigateTo('form');
+        } else if (current === 'form') {
+          navigateTo('asset');
+        }
+        // ad 화면은 자동 전환이므로 백버튼 무시
+      },
+      onError: (err) => console.warn('backEvent error:', err),
+    });
+
+    return unsubscribe;
+  }, [screen, navigateTo]);
 
   // 배너 광고 SDK 초기화 — 앱 최상위에서 한 번만 호출
   // isSupported()는 토스 네이티브 브릿지가 없으면 throw하므로 try-catch로 감싸요.
@@ -36,7 +63,7 @@ export function App() {
 
   function handleAssetSelect(asset: Asset) {
     setSelectedAsset(asset);
-    setScreen('form');
+    navigateTo('form');
   }
 
   function handleFormSubmit(params: {
@@ -57,20 +84,20 @@ export function App() {
       setInvestType(params.type);
       setStartYM(params.startYearMonth);
       setResult(r);
-      setScreen('ad'); // 전면 광고 표시 후 결과로 이동
+      navigateTo('ad'); // 전면 광고 표시 후 결과로 이동
     }
   }
 
   function handleAdComplete() {
-    setScreen('result');
+    navigateTo('result');
   }
 
   function handleReset() {
     // 완전 초기화 — React State만 사용, 외부 저장소 없음
-    setScreen('asset');
     setSelectedAsset(null);
     setResult(null);
     setStartYM('');
+    navigateTo('asset');
   }
 
   return (
@@ -83,7 +110,6 @@ export function App() {
         {screen === 'form' && selectedAsset && (
           <FormScreen
             asset={selectedAsset}
-            onBack={() => setScreen('asset')}
             onSubmit={handleFormSubmit}
           />
         )}

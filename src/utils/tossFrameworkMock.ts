@@ -26,6 +26,50 @@ export async function share(options: { message: string }): Promise<void> {
   }
 }
 
+// ─── graniteEvent (뒤로가기·홈 이벤트) ─────────────────────────────────────
+
+/**
+ * 네이티브 이벤트 리스너
+ * 실제: import { graniteEvent } from '@apps-in-toss/web-framework'
+ * backEvent 등록 시 기본 뒤로가기(앱 종료)가 차단되고 onEvent가 호출돼요.
+ */
+type GraniteEventType = 'backEvent' | 'homeEvent';
+interface GraniteEventListener {
+  onEvent: () => void;
+  onError?: (error: unknown) => void;
+}
+
+const _backEventListeners: Set<GraniteEventListener> = new Set();
+
+export const graniteEvent = {
+  addEventListener(type: GraniteEventType, listener: GraniteEventListener): () => void {
+    if (type === 'backEvent') {
+      _backEventListeners.add(listener);
+
+      // Mock: 브라우저 popstate로 backEvent 시뮬레이션
+      const handler = (e: PopStateEvent) => {
+        if (_backEventListeners.has(listener)) {
+          e.preventDefault();
+          // 히스토리를 다시 push해서 뒤로가기 소비를 방지
+          history.pushState(null, '');
+          try {
+            listener.onEvent();
+          } catch (err) {
+            listener.onError?.(err);
+          }
+        }
+      };
+      window.addEventListener('popstate', handler);
+
+      return () => {
+        _backEventListeners.delete(listener);
+        window.removeEventListener('popstate', handler);
+      };
+    }
+    return () => {};
+  },
+};
+
 // ─── 통합 광고 2.0 ver2 ────────────────────────────────────────────────────
 
 type LoadFullScreenAdEvent = { type: 'loaded' };

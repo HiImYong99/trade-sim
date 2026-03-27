@@ -6,7 +6,6 @@ import type { InvestmentType } from '../hooks/useSimulation';
 
 interface FormScreenProps {
   asset: Asset;
-  onBack: () => void;
   onSubmit: (params: {
     type: InvestmentType;
     startYearMonth: string;
@@ -181,7 +180,7 @@ const ps: Record<string, React.CSSProperties> = {
 
 // ─── Main Form ──────────────────────────────────────────────────────────────
 
-export function FormScreen({ asset, onBack, onSubmit }: FormScreenProps) {
+export function FormScreen({ asset, onSubmit }: FormScreenProps) {
   const earliestDate = getEarliestDate(asset);
   const earliestYear = Number(earliestDate.slice(0, 4));
   const amountInputId = useId();
@@ -229,13 +228,6 @@ export function FormScreen({ asset, onBack, onSubmit }: FormScreenProps) {
     <div style={s.container}>
       {/* 헤더 */}
       <div style={s.header}>
-        <button
-          onClick={onBack}
-          style={s.backBtn}
-          aria-label="뒤로 가기"
-        >
-          ←
-        </button>
         <div style={s.assetBadge} aria-label={`선택된 자산: ${asset.name}`}>
           <span aria-hidden="true">{asset.emoji}</span>
           <span style={s.assetBadgeName}>{asset.name}</span>
@@ -386,21 +378,6 @@ const s: Record<string, React.CSSProperties> = {
     padding: '16px 20px',
     gap: 12,
     borderBottom: '1px solid #F2F4F6',
-  },
-  backBtn: {
-    background: 'none',
-    border: 'none',
-    fontSize: 20,
-    color: '#191F28',
-    cursor: 'pointer',
-    padding: '4px 8px',
-    lineHeight: 1,
-    minWidth: 44,
-    minHeight: 44,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
   },
   assetBadge: {
     display: 'flex',

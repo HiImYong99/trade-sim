@@ -14,10 +14,7 @@ interface AdScreenProps {
   onAdComplete: () => void;
 }
 
-type AdState = 'loading' | 'showing';
-
 export function AdScreen({ asset, onAdComplete }: AdScreenProps) {
-  const [adState, setAdState] = useState<AdState>('loading');
   const [dots, setDots] = useState('');
 
   // 점 애니메이션 (시각적 피드백)
@@ -55,7 +52,6 @@ export function AdScreen({ asset, onAdComplete }: AdScreenProps) {
       options: { adGroupId: AD_IDS.interstitial },
       onEvent: (event) => {
         if (event.type === 'loaded') {
-          setAdState('showing');
           showUnregister = showFullScreenAd({
             options: { adGroupId: AD_IDS.interstitial },
             onEvent: (e) => {
@@ -87,34 +83,15 @@ export function AdScreen({ asset, onAdComplete }: AdScreenProps) {
       `}</style>
       <div style={s.overlay}>
         <div style={s.card}>
-          {/* 광고 레이블 */}
-          <div style={s.adLabel}>
-            <span>광고</span>
-            <span style={s.adType}>전면 광고</span>
-          </div>
-
-          {/* 광고 콘텐츠 영역 */}
-          <div style={s.adContent}>
-            <div style={{ ...s.assetIcon, background: asset.color + '20' }}>
-              <span style={{ fontSize: 40 }}>{asset.emoji}</span>
-            </div>
-            <p style={s.adTitle}>스마트한 투자자를 위한<br />금융 정보</p>
-            <p style={s.adBody}>
-              지금 바로 시작하세요.<br />
-              당신의 재무 미래를 설계해 보세요.
-            </p>
-            <span style={s.adSponsor}>광고주 · 금융 서비스</span>
-          </div>
-
-          {/* 로딩 상태 */}
           <div style={s.loadingSection}>
+            <div style={{ ...s.assetIcon, background: asset.color + '20' }}>
+              <span style={{ fontSize: 32 }}>{asset.emoji}</span>
+            </div>
             <div style={s.progressBar}>
-              <div style={s.progressShimmer} className="ad-progress-shimmer" />
+              <div style={s.progressShimmer} />
             </div>
             <p style={s.loadingText}>
-              {adState === 'loading'
-                ? `광고 불러오는 중${dots}`
-                : `${asset.name} 수익 계산 중${dots}`}
+              {`${asset.name} 수익 계산 중${dots}`}
             </p>
           </div>
         </div>
@@ -141,70 +118,27 @@ const s: Record<string, React.CSSProperties> = {
     borderRadius: 20,
     overflow: 'hidden',
   },
-  adLabel: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '10px 16px',
-    background: '#F2F4F6',
-    fontSize: 12,
-    color: '#8B95A1',
-    fontWeight: 500,
-  },
-  adType: {
-    fontSize: 11,
-    color: '#B0B8C1',
-  },
-  adContent: {
-    padding: '28px 24px 20px',
+  loadingSection: {
+    padding: '28px 24px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 10,
-    background: '#FAFBFF',
+    gap: 14,
   },
   assetIcon: {
-    width: 72,
-    height: 72,
-    borderRadius: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 16,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
-  },
-  adTitle: {
-    fontSize: 17,
-    fontWeight: 700,
-    color: '#191F28',
-    textAlign: 'center',
-    margin: 0,
-    lineHeight: 1.5,
-    letterSpacing: '-0.3px',
-  },
-  adBody: {
-    fontSize: 13,
-    color: '#6B7684',
-    textAlign: 'center',
-    margin: 0,
-    lineHeight: 1.6,
-  },
-  adSponsor: {
-    fontSize: 11,
-    color: '#B0B8C1',
-    padding: '3px 10px',
-    background: '#F2F4F6',
-    borderRadius: 100,
-  },
-  loadingSection: {
-    padding: '14px 20px 18px',
-    borderTop: '1px solid #F2F4F6',
   },
   progressBar: {
+    width: '100%',
     height: 4,
     background: '#E5E8EB',
     borderRadius: 100,
     overflow: 'hidden',
-    marginBottom: 10,
     position: 'relative',
   },
   progressShimmer: {

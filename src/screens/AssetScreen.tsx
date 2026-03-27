@@ -25,7 +25,16 @@ export function AssetScreen({ onSelect }: AssetScreenProps) {
             role="listitem"
           >
             <div style={{ ...s.iconBox, background: asset.color + '18' }}>
-              <span style={s.emoji} aria-hidden="true">{asset.emoji}</span>
+              <img
+                src={asset.icon}
+                alt={asset.name}
+                style={s.iconImg}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  (e.target as HTMLImageElement).parentElement!.querySelector('span')!.style.display = 'block';
+                }}
+              />
+              <span style={{ ...s.emoji, display: 'none' }} aria-hidden="true">{asset.emoji}</span>
             </div>
             <p style={s.assetName}>{asset.name}</p>
             <p style={s.assetTicker}>{asset.ticker}</p>
@@ -93,6 +102,12 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconImg: {
+    width: 28,
+    height: 28,
+    objectFit: 'contain',
+    borderRadius: 4,
   },
   emoji: {
     fontSize: 22,

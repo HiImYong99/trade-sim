@@ -59,13 +59,6 @@ export function ResultScreen({ asset, type, startYearMonth, result, onReset }: R
     <div style={s.container}>
       {/* 상단 내비게이션 */}
       <div style={s.topBar}>
-        <button
-          onClick={onReset}
-          style={s.backBtn}
-          aria-label="처음으로 돌아가기"
-        >
-          ← 다시 계산
-        </button>
         <div style={s.assetTag} aria-label={`자산: ${asset.name}`}>
           <span aria-hidden="true">{asset.emoji}</span>
           <span>{asset.name}</span>
@@ -187,6 +180,18 @@ export function ResultScreen({ asset, type, startYearMonth, result, onReset }: R
           </div>
         </div>
 
+        <div style={s.resetSection}>
+          <Button
+            color="primary"
+            variant="weak"
+            display="full"
+            size="large"
+            onClick={onReset}
+          >
+            다시 계산하기
+          </Button>
+        </div>
+
         <div style={{ height: 32 }} />
       </main>
     </div>
@@ -255,21 +260,6 @@ const s: Record<string, React.CSSProperties> = {
     position: 'sticky',
     top: 0,
     zIndex: 10,
-  },
-  backBtn: {
-    background: 'none',
-    border: 'none',
-    fontSize: 14,
-    color: '#3182F6',
-    cursor: 'pointer',
-    padding: '8px 12px',
-    fontWeight: 600,
-    minHeight: 44,
-    minWidth: 44,
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: 8,
-    WebkitTapHighlightColor: 'transparent',
   },
   assetTag: {
     display: 'flex',
@@ -390,5 +380,9 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: 'center',
     margin: '8px 0 0',
     fontWeight: 600,
+  },
+  resetSection: {
+    marginTop: 4,
+    marginBottom: 12,
   },
 };

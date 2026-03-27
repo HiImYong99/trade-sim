@@ -14,6 +14,7 @@ export interface Asset {
   type: AssetType;
   currency: 'USD' | 'KRW';
   emoji: string;
+  icon: string;
   color: string;
   description: string;
   /** YYYY-MM → price (USD or KRW) */
@@ -55,6 +56,7 @@ export const ASSETS: Asset[] = [
     ticker: 'BTC',
     type: 'crypto',
     emoji: '₿',
+    icon: '/icons/btc.png',
     color: '#F7931A',
     description: '디지털 금',
     prices: interpolate([
@@ -81,6 +83,7 @@ export const ASSETS: Asset[] = [
     ticker: 'ETH',
     type: 'crypto',
     emoji: '◈',
+    icon: '/icons/eth.png',
     color: '#627EEA',
     description: '스마트 컨트랙트 플랫폼',
     prices: interpolate([
@@ -105,6 +108,7 @@ export const ASSETS: Asset[] = [
     ticker: 'NVDA',
     type: 'stock',
     emoji: '🟢',
+    icon: '/icons/nvda.png',
     color: '#76B900',
     description: 'AI 반도체 선두주자',
     prices: interpolate([
@@ -128,6 +132,7 @@ export const ASSETS: Asset[] = [
     ticker: 'TSLA',
     type: 'stock',
     emoji: '⚡',
+    icon: '/icons/tsla.png',
     color: '#E31937',
     description: '전기차 혁신 기업',
     prices: interpolate([
@@ -150,6 +155,7 @@ export const ASSETS: Asset[] = [
     ticker: 'AAPL',
     type: 'stock',
     emoji: '🍎',
+    icon: '/icons/aapl.png',
     color: '#555555',
     description: '세계 최대 시가총액 기업',
     prices: interpolate([
@@ -172,6 +178,7 @@ export const ASSETS: Asset[] = [
     ticker: '005930',
     type: 'stock',
     emoji: '📱',
+    icon: '/icons/samsung.png',
     color: '#1428A0',
     description: '국내 대표 반도체·가전 기업',
     prices: interpolate([
@@ -194,6 +201,7 @@ export const ASSETS: Asset[] = [
     ticker: 'SPY',
     type: 'etf',
     emoji: '🇺🇸',
+    icon: '/icons/spy.svg',
     color: '#3182F6',
     description: '미국 대표 500개 기업 지수',
     prices: interpolate([
@@ -216,6 +224,7 @@ export const ASSETS: Asset[] = [
     ticker: 'GOLD',
     type: 'commodity',
     emoji: '🥇',
+    icon: '/icons/gold.svg',
     color: '#D4AF37',
     description: '대표적인 안전 자산',
     prices: interpolate([
