@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@toss/tds-mobile';
-import { type Asset } from '../data/assets';
+import { type Asset, USD_KRW } from '../data/assets';
 import { type SimulationResult, type InvestmentType, DATA_END_LABEL } from '../hooks/useSimulation';
 import { PriceChart } from '../components/PriceChart';
 import { share, getTossShareLink } from '@apps-in-toss/web-framework';
@@ -225,7 +225,9 @@ function DetailRow({
 
 function formatAssetPrice(price: number, currency: 'USD' | 'KRW'): string {
   if (currency === 'USD') {
-    return price < 1 ? `$${price.toFixed(2)}` : `$${price.toLocaleString()}`;
+    const usd = price < 1 ? `$${price.toFixed(2)}` : `$${price.toLocaleString()}`;
+    const krw = formatKRW(Math.round(price * USD_KRW));
+    return `${usd} (≈${krw})`;
   }
   return `${price.toLocaleString()}원`;
 }

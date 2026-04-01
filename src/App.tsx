@@ -6,7 +6,7 @@ import { ResultScreen } from './screens/ResultScreen';
 import { BannerAd } from './components/BannerAd';
 import { type Asset } from './data/assets';
 import { calculateSimulation, type InvestmentType, type SimulationResult } from './hooks/useSimulation';
-import { TossAds, graniteEvent } from '@apps-in-toss/web-framework';
+import { TossAds, graniteEvent, closeView } from '@apps-in-toss/web-framework';
 
 type Screen = 'asset' | 'form' | 'ad' | 'result';
 
@@ -24,15 +24,16 @@ export function App() {
     setScreen(next);
   }, []);
 
-  // graniteEvent backEvent — asset 화면이 아닐 때만 등록하여 이전 화면으로 이동
-  // asset 화면에서는 리스너를 해제하여 네이티브 기본 동작(앱 종료)이 실행돼요.
+  // graniteEvent backEvent — 모든 화면에서 등록하여 뒤로가기 동작을 명시적으로 제어해요.
+  // asset(최초) 화면에서는 closeView()를 호출해 앱을 종료해요.
+  // WebView에서 리스너 미등록 시 브라우저 히스토리 백이 시도되어 앱이 종료되지 않아요.
   useEffect(() => {
-    if (screen === 'asset') return; // 최초 화면: 리스너 없음 → 네이티브 백 = 앱 종료
-
     const unsubscribe = graniteEvent.addEventListener('backEvent', {
       onEvent: () => {
         const current = screenRef.current;
-        if (current === 'result') {
+        if (current === 'asset') {
+          closeView(); // 최초 화면: 앱 종료
+        } else if (current === 'result') {
           navigateTo('form');
         } else if (current === 'form') {
           navigateTo('asset');

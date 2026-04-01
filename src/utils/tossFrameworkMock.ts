@@ -10,6 +10,21 @@
  * - 비게임 프로모션: POST /api-partner/v1/apps-in-toss/promotion/execute-promotion
  */
 
+// ─── 앱 종료 ────────────────────────────────────────────────────────────────
+
+/**
+ * 미니앱 종료 (토스 앱으로 복귀)
+ * 실제: import { closeView } from '@apps-in-toss/web-framework'
+ */
+export function closeView(): void {
+  // Mock: 로컬 환경에서는 이전 페이지로 이동
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.close();
+  }
+}
+
 // ─── 공유하기 ───────────────────────────────────────────────────────────────
 
 /**
