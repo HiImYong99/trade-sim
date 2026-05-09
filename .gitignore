@@ -2,3 +2,5 @@ node_modules/
 dist/
 .granite/
 *.ait
+.omc/
+dist.zip

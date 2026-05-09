@@ -5,8 +5,8 @@
  * - 데이터 출처: 공개 시장 역사 가격 (시뮬레이션용 근사값)
  */
 
-/** USD/KRW 환율 기준: 2026-04-01 AM 11:19 UTC */
-export const USD_KRW = 1505;
+/** USD/KRW 환율 기준: 2026-05-09 */
+export const USD_KRW = 1462;
 
 export type AssetType = 'crypto' | 'stock' | 'etf' | 'commodity';
 
